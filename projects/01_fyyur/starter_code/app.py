@@ -22,6 +22,8 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
+# Why connect to the database again here? Ist't that what app.config.from_object is doing above? 
+# This is confusing.
 
 #----------------------------------------------------------------------------#
 # Models.
