@@ -40,7 +40,7 @@ def upgrade():
     sa.Column('facebook_link', sa.String(length=120), nullable=True),
     sa.Column('website_link', sa.String(length=120), nullable=True),
     sa.Column('genres', sa.ARRAY(sa.String()), nullable=True),
-    sa.Column('comment', sa.Text(length=500), nullable=True),
+    sa.Column('comment', sa.String(length=500), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
