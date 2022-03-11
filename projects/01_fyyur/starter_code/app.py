@@ -35,7 +35,7 @@ migrate = Migrate(app, db)
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(), nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
@@ -46,13 +46,14 @@ class Venue(db.Model):
     website_link = db.Column(db.String(120))
     genres = db.Column(db.ARRAY(db.String))
     comment = db.Column(db.String(500))
+    artist = db.relationship('Artist', secondary='shows', backref=db.backref('venue', lazy=True))
 
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
 
 class Artist(db.Model):
     __tablename__ = 'Artist'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(), nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
@@ -60,10 +61,26 @@ class Artist(db.Model):
     genres = db.Column(db.ARRAY(db.String()), nullable=False)
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    venue = db.relationship('Venue', secondary='shows', backref=db.backref('artist', lazy=True))
 
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
 
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
+# TODO DONE:Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
+
+class Show(db.Model):
+  __tablename__ = 'shows'
+
+  id = db.Column(db.Integer, primary_key=True, nullable=False)
+  start_time = db.Column(db.DateTime(), nullable=False)
+
+  #Foreign keys
+  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'))
+  venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'))
+
+  # Relationships
+  artist = db.relationship(Artist, backref=db.backref('shows', cascade='all, delete'))
+  venue = db.relationship(Venue, backref=db.backref('shows', cascade='all, delete'))
+
 
 #----------------------------------------------------------------------------#
 # Filters.
