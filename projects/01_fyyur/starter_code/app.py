@@ -290,7 +290,7 @@ def create_venue_submission():
   if error:
     flash('An error occured. Venue '+ request.form['name'] + 'could not be added.')
   else:
-    flash('Venue ' + request.form['name'] + 'has been successfully listed.')
+    flash('Venue ' + request.form['name'] + ' has been successfully listed.')
   
   return render_template('pages/home.html')
 
