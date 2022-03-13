@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------#
 
 import json
+from xmlrpc.client import Boolean
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for, abort
@@ -46,7 +47,8 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
     genres = db.Column(db.ARRAY(db.String))
-    comment = db.Column(db.String(500))
+    seeking_talent = db.Column(Boolean, default=False)
+    seeking_description = db.Column(db.String(500))
     shows = db.relationship('Show', backref=db.backref('venue'), lazy='joined', cascade='all, delete')
 
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
@@ -256,7 +258,11 @@ def create_venue_submission():
   genres = data['genres']
   facebook_link = data['facebook_link']
   image_link = data['image_link']
-  website_link=data['website_link']
+  website_link = data['website_link']
+  seeking_talent = False
+  if seeking_talent in data:
+    seeking_talent = True
+  seeking_description = data['seeking_description']
 
   venue = Venue(
     name=name, 
@@ -267,7 +273,9 @@ def create_venue_submission():
     image_link=image_link, 
     facebook_link=facebook_link, 
     website_link=website_link, 
-    genres=genres
+    genres=genres,
+    seeking_talent=seeking_talent,
+    seeking_description=seeking_description
   )
 
   try:
