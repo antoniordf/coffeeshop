@@ -46,8 +46,8 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
-    genres = db.Column(db.ARRAY(db.String))
-    seeking_talent = db.Column(Boolean, default=False)
+    genres = db.Column(db.ARRAY(db.String()))
+    seeking_talent = db.Column(db.Boolean, default=False)
     seeking_description = db.Column(db.String(500))
     shows = db.relationship('Show', backref=db.backref('venue'), lazy='joined', cascade='all, delete')
 
