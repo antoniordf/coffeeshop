@@ -47,7 +47,7 @@ class Venue(db.Model):
     website_link = db.Column(db.String(120))
     genres = db.Column(db.ARRAY(db.String))
     comment = db.Column(db.String(500))
-    artist = db.relationship('artist', secondary='shows', backref=db.backref('venue', lazy=True))
+    shows = db.relationship('Show', backref=db.backref('venue'), lazy='joined', cascade='all, delete')
 
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
 
@@ -62,7 +62,7 @@ class Artist(db.Model):
     genres = db.Column(db.ARRAY(db.String()), nullable=False)
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    venue = db.relationship('venue', secondary='shows', backref=db.backref('artist', lazy=True))
+    shows = db.relationship('Show', backref=db.backref('artist'), lazy='joined', cascade='all, delete')
 
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
 
@@ -79,8 +79,8 @@ class Show(db.Model):
   venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
 
   # Relationships
-  artist = db.relationship(Artist, backref=db.backref('shows', cascade='all, delete'))
-  venue = db.relationship(Venue, backref=db.backref('shows', cascade='all, delete'))
+  #artist = db.relationship('Artist', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
+  #venue = db.relationship('Venue', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
 
 
 #----------------------------------------------------------------------------#
