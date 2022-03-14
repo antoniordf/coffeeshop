@@ -46,7 +46,7 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
-    genres = db.Column(db.ARRAY(db.String()))
+    genres = db.Column(db.ARRAY(db.String())) #db.ARRAY used so that an array of genres can be added to db
     seeking_talent = db.Column(db.Boolean, default=False)
     seeking_description = db.Column(db.String(500))
     shows = db.relationship('Show', backref=db.backref('venue'), lazy='joined', cascade='all, delete')
@@ -255,12 +255,12 @@ def create_venue_submission():
   state = data['state']
   address = data['address']
   phone = data['phone']
-  genres = data['genres']
+  genres = data.getlist('genres') #getlist used so that multiple genres are added successfully to db 
   facebook_link = data['facebook_link']
   image_link = data['image_link']
   website_link = data['website_link']
   seeking_talent = False
-  if seeking_talent in data:
+  if seeking_talent in data: #seeking_talent is a box that should be ticked on the browser.
     seeking_talent = True
   seeking_description = data['seeking_description']
 
