@@ -254,7 +254,11 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
-  error=False
+  
+  form = VenueForm(request.form)
+
+  '''
+  With Flask-WTF the below code is not necessary.
 
   data = request.form
   name = data['name']
@@ -270,34 +274,42 @@ def create_venue_submission():
   if seeking_talent in data: #seeking_talent is a box that should be ticked on the browser.
     seeking_talent = True
   seeking_description = data['seeking_description']
+  '''
 
   venue = Venue(
-    name=name, 
-    city=city, 
-    state=state, 
-    address=address, 
-    phone=phone, 
-    image_link=image_link, 
-    facebook_link=facebook_link, 
-    website_link=website_link, 
-    genres=genres,
-    seeking_talent=seeking_talent,
-    seeking_description=seeking_description
+    name=form.name.data, 
+    city=form.city.data, 
+    state=form.state.data, 
+    address=form.address.data, 
+    phone=form.phone.data, 
+    image_link=form.image_link.data, 
+    facebook_link=form.facebook_link.data, 
+    website_link=form.website_link.data, 
+    genres=form.genres.data,
+    seeking_talent=form.seeking_talent.data,
+    seeking_description=form.seeking_description.data
   )
+  '''
+  I could also have done the below, but I opted to left the code explicit so I learn what's happening:
+  
+  form = VenueForm(request.form)
+  try:
+    venue = Venue()
+    form.populate_obj(venue)
+    db.session.add(venue)
 
+  '''
   try:
     db.session.add(venue)
     db.session.commit()
+    flash('Venue ' + request.form['name'] + ' has been successfully listed.')
   except:
     error=True
     db.session.rollback()
     print(sys.exc_info())
+    flash('An error occured. Venue '+ request.form['name'] + 'could not be added.')
   finally:
     db.session.close()
-  if error:
-    flash('An error occured. Venue '+ request.form['name'] + 'could not be added.')
-  else:
-    flash('Venue ' + request.form['name'] + ' has been successfully listed.')
   
   return render_template('pages/home.html')
 
