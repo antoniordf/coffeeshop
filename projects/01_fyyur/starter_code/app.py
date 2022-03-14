@@ -50,7 +50,7 @@ class Venue(db.Model):
     seeking_talent = db.Column(db.Boolean, default=False)
     seeking_description = db.Column(db.String(500))
     shows = db.relationship('Show', backref=db.backref('venue'), lazy='joined', cascade='all, delete')
-
+    
     # TODO: DONE:implement any missing fields, as a database migration using Flask-Migrate
 
 class Artist(db.Model):
@@ -80,10 +80,17 @@ class Show(db.Model):
   artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'))
   venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
 
-  # Relationships
-  #artist = db.relationship('Artist', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
-  #venue = db.relationship('Venue', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
+  '''
+  Relationships
+  artist = db.relationship('Artist', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
+  venue = db.relationship('Venue', backref=db.backref('shows', cascade='all, delete'), lazy='joined')
 
+  Amy's lesson taught an association table, but here we are using an association object (class Show). When using
+  an association object, we either define the relationships on the two parents (Artist and Venue) or we
+  define them all in the child class (and not in the parents) with the commented out code above. I chose
+  to define them in the parent classes. Also, when working with association object, there is no need to
+  use "secondary" parameter as taught by Amy.
+  '''
 
 #----------------------------------------------------------------------------#
 # Filters.
