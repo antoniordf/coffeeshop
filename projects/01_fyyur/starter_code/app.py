@@ -640,7 +640,24 @@ def create_artist_submission():
 
 @app.route('/shows')
 def shows():
-  # displays list of shows at /shows
+
+  data = []
+
+  shows = Show.query.order_by(Show.start_time.desc()).all()
+
+  for show in shows:
+    data.extend([{
+      'venue_id': show.venue.id,
+      'venue_name': show.venue.name,
+      'artist_id': show.artist.id,
+      'artist_name': show.artist.name,
+      'artist_image_link': show.artist.image_link,
+      'start_time': show.start_time.strftime("%m/%d/%Y, %H:%M")
+    }])
+
+  return render_template('pages/shows.html', shows=data)
+
+  # DONE: displays list of shows at /shows
   # TODO: replace with real venues data.
   data=[{
     "venue_id": 1,
