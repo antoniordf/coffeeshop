@@ -481,11 +481,11 @@ def edit_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-  
+
   artist = Artist.query.filter_by(id=artist_id).first_or_404()
   form = ArtistForm(request.form)
 
-  if form.validate():
+  if form.validate(): #.validate() checks if form was filled correctly. If not, field highlights red and wont submit.
 
     artist.name = form.name.data
     artist.city = form.city.data
