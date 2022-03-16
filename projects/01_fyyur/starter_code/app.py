@@ -124,9 +124,12 @@ def index():
 
 @app.route('/venues')
 def venues():
-  # TODO: replace with real venues data.
+  # TODO: DONE: replace with real venues data.
   #       num_upcoming_shows should be aggregated based on number of upcoming shows per venue.
 
+  #The .distinct() method brings all of the distinct values for a particular column.
+  #The below line of code will look at the column containing all cities and states of venues and return 
+  #a set of the cities and states contained.
   areas = db.session.query(Venue.city, Venue.state).distinct(Venue.city, Venue.state).order_by('state').all()
 
   data = []
