@@ -2,6 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
+from datetime import date
 import json
 from xmlrpc.client import Boolean
 import dateutil.parser
@@ -384,6 +385,56 @@ def search_artists():
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
   # TODO: replace with real artist data from the artist table, using artist_id
+
+  upcoming_shows = []
+  upcoming_shows_info = []
+  past_shows = []
+  past_shows_info = []
+  get_artist = Artist.query.get_or_404(artist_id)
+
+  for show in get_artist.shows:
+    if show.start_time > datetime.now():
+      upcoming_shows.append(show)
+    else:
+      past_shows.append(show)
+
+  for past_show in past_shows:
+    past_shows_info.append({
+      "venue_id": Venue.query.get_or_404(past_show.venue_id).id,
+      "venue_name": Venue.query.get_or_404(past_show.venue_id).name,
+      "venue_image_link": Venue.query.get_or_404(past_show.venue_id).image_link,
+      "start_time": str(past_show.start_time)
+    })
+
+  for upcoming_show in upcoming_shows:
+    upcoming_shows_info.append({
+      "venue_id": Venue.query.get_or_404(upcoming_show.venue_id).id,
+      "venue_name": Venue.query.get_or_404(upcoming_show.venue_id).name,
+      "venue_image_link": Venue.query.get_or_404(upcoming_show.venue_id).image_link,
+      "start_time": str(upcoming_show.start_time)
+    })
+  
+  data = {
+    "id": get_artist.id,
+    "name": get_artist.name,
+    "genres": get_artist.genres,
+    "city": get_artist.city,
+    "state": get_artist.state,
+    "phone": get_artist.phone,
+    "website": get_artist.website_link,
+    "facebook_link": get_artist.facebook_link,
+    "seeking_venue": get_artist.seeking_venue,
+    "seeking_description": get_artist.seeking_description,
+    "image_link": get_artist.image_link,
+    "past_shows": past_shows_info,
+    "past_shows_count": len(past_shows),
+    "upcoming_shows_count": len(upcoming_shows)
+  }  
+  
+  # data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]   -> Not sure what this expression is doing.
+  return render_template('pages/show_artist.html', artist=data)
+
+  
   data1={
     "id": 4,
     "name": "Guns N Petals",
@@ -455,8 +506,6 @@ def show_artist(artist_id):
     "past_shows_count": 0,
     "upcoming_shows_count": 3,
   }
-  data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
-  return render_template('pages/show_artist.html', artist=data)
 
 #  Update
 #  ----------------------------------------------------------------
@@ -695,7 +744,7 @@ def shows():
     "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
     "start_time": "2035-04-15T20:00:00.000Z"
   }]
-  return render_template('pages/shows.html', shows=data)
+
 
 @app.route('/shows/create')
 def create_shows():
