@@ -414,7 +414,7 @@ def search_artists():
 
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
-  # shows the artist page with the given artist_id
+  # DONE: shows the artist page with the given artist_id
   # TODO: replace with real artist data from the artist table, using artist_id
 
   artist = Artist.query.get_or_404(artist_id)
@@ -656,6 +656,7 @@ def shows():
 
   # DONE: displays list of shows at /shows
   # TODO: replace with real venues data.
+  '''
   data=[{
     "venue_id": 1,
     "venue_name": "The Musical Hop",
@@ -692,7 +693,7 @@ def shows():
     "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
     "start_time": "2035-04-15T20:00:00.000Z"
   }]
-
+'''
 
 @app.route('/shows/create')
 def create_shows():
