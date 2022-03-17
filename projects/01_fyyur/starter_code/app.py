@@ -511,7 +511,7 @@ def edit_artist_submission(artist_id):
   else:
     message = []
     for field, errors in form.errors.items():
-      message.append(form[field].label + ', '.join(errors))
+      message.append(str(form[field].label) + ', '.join(errors))
       flash('Errors: ' + '|'.join(message))
 
   return redirect(url_for('show_artist', artist_id=artist_id))
@@ -575,7 +575,7 @@ def edit_venue_submission(venue_id):
   else:
     message = []
     for field, errors in form.errors.items():
-      message.append(form[field].label + ', '.join(errors))
+      message.append(str(form[field].label) + ', '.join(errors))
       flash('Errors: ' + '|'.join(message))
 
   return redirect(url_for('show_venue', venue_id=venue_id))
