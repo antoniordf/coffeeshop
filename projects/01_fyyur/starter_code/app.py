@@ -278,8 +278,6 @@ def show_venue(venue_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 1,
   }
-  #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
-  #return render_template('pages/show_venue.html', venue=data)
 
 #  Create Venue
 #  ----------------------------------------------------------------
