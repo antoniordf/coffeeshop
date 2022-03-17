@@ -16,6 +16,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 import sys
+import os
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -754,11 +755,13 @@ if not app.debug:
 #----------------------------------------------------------------------------#
 
 # Default port:
-if __name__ == '__main__':
-    app.run()
 
-# Or specify port manually:
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0', port=3000) #Changed port to 3000 due to this issue: https://medium.com/pythonistas/port-5000-already-in-use-macos-monterey-issue-d86b02edd36c
+
 '''
+# Or specify port manually:
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
