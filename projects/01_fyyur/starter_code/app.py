@@ -201,7 +201,7 @@ def show_venue(venue_id):
   data['upcoming_shows_count'] = len(upcoming_shows)
   
   return render_template('pages/show_venue.html', venue=data)
-
+'''
   data1={
     "id": 1,
     "name": "The Musical Hop",
@@ -279,7 +279,7 @@ def show_venue(venue_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 1,
   }
-
+'''
 #  Create Venue
 #  ----------------------------------------------------------------
 
