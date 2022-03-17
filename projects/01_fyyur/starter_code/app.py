@@ -291,7 +291,7 @@ def create_venue_form():
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
   
-  form = VenueForm(request.form)
+  form = VenueForm(request.form, meta={'csrf': False})
 
   '''
   With Flask-WTF the below code is not necessary.
@@ -483,7 +483,7 @@ def edit_artist(artist_id):
 def edit_artist_submission(artist_id):
 
   artist = Artist.query.filter_by(id=artist_id).first_or_404()
-  form = ArtistForm(request.form)
+  form = ArtistForm(request.form, meta={'csrf': False})
 
   if form.validate(): #.validate() checks if form was filled correctly. If not, field highlights red and wont submit.
 
@@ -566,7 +566,7 @@ def edit_venue(venue_id):
 def edit_venue_submission(venue_id):
 
   venue = Venue.query.filter_by(id=venue_id).first_or_404()
-  form = VenueForm(request.form)
+  form = VenueForm(request.form, meta={'csrf': False})
 
   if form.validate(): #.validate() checks if form was filled correctly. If not, field highlights red and wont submit.
 
@@ -616,7 +616,7 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
 
-  form = ArtistForm(request.form)
+  form = ArtistForm(request.form, meta={'csrf': False})
 
   artist = Artist(
     name=form.name.data, 
@@ -724,7 +724,7 @@ def create_shows():
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
 
-  form = ShowForm(request.form)
+  form = ShowForm(request.form, meta={'csrf': False})
 
   show = Show(
     artist_id=form.artist_id.data, 
