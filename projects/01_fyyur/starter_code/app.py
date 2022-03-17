@@ -184,7 +184,7 @@ def show_venue(venue_id):
       'venue_id': artist.id,
       'venue_name': artist.name,
       'venue_image_link': artist.image_link,
-      'start_time': show.start_time
+      'start_time': show.start_time.strftime("%d/%m/%Y, %H:%M") #See https://knowledge.udacity.com/questions/321974
     }
 
     if show.start_time <= datetime.now():
@@ -429,7 +429,7 @@ def show_artist(artist_id):
       'venue_id': venue.id,
       'venue_name': venue.name,
       'venue_image_link': venue.image_link,
-      'start_time': show.start_time
+      'start_time': show.start_time.strftime("%d/%m/%Y, %H:%M") #See https://knowledge.udacity.com/questions/321974
     }
 
     if show.start_time <= datetime.now():
