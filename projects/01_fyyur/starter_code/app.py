@@ -408,7 +408,17 @@ def show_artist(artist_id):
     else:
       upcoming_shows.append(tmp_show)
 
-  data = vars(artist)
+  '''
+  The vars() function returns the __dict__ attribute of an object. Basically it converts 
+  the attributes of an object into a dictionary. See https://www.w3schools.com/python/ref_func_vars.asp
+  In this case vars(artist) is equivalent to:
+  data {
+    'name':artist.name,
+    'city':artist.city,
+    ...
+  }
+  '''
+  data = vars(artist)  
 
   data['past_shows'] = past_shows
   data['upcoming_shows'] = upcoming_shows
