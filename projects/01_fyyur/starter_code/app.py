@@ -170,8 +170,37 @@ def search_venues():
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
-  # shows the venue page with the given venue_id
-  # TODO: replace with real venue data from the venues table, using venue_id
+  # DONE: shows the venue page with the given venue_id
+  # TODO: DONE: replace with real venue data from the venues table, using venue_id
+
+  venue = Venue.query.get_or_404(venue_id)
+  shows = db.session.query(Show, Venue).join(Artist).filter_by(id=venue_id).all()
+  
+  upcoming_shows = []
+  past_shows = []  
+
+  for show, artist in shows:
+    tmp_show = {
+      'venue_id': artist.id,
+      'venue_name': artist.name,
+      'venue_image_link': artist.image_link,
+      'start_time': show.start_time
+    }
+
+    if show.start_time <= datetime.now():
+      past_shows.append(tmp_show)
+    else:
+      upcoming_shows.append(tmp_show)
+
+  data = vars(venue)  
+
+  data['past_shows'] = past_shows
+  data['upcoming_shows'] = upcoming_shows
+  data['past_shows_count'] = len(past_shows)
+  data['upcoming_shows_count'] = len(upcoming_shows)
+  
+  return render_template('pages/show_venue.html', venue=data)
+
   data1={
     "id": 1,
     "name": "The Musical Hop",
@@ -249,8 +278,8 @@ def show_venue(venue_id):
     "past_shows_count": 1,
     "upcoming_shows_count": 1,
   }
-  data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
-  return render_template('pages/show_venue.html', venue=data)
+  #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
+  #return render_template('pages/show_venue.html', venue=data)
 
 #  Create Venue
 #  ----------------------------------------------------------------
