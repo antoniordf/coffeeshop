@@ -330,18 +330,16 @@ def create_venue_submission():
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
-  error = False
+  
   try:
     Venue.query.filter_by(id=venue_id).delete()
     db.session.commit()
+    flash(Venue.name + 'has been deleted')
   except:
     db.session.rollback()
+    flash(Venue.name + 'could not be deleted')
   finally:
     db.session.close()
-  if error:
-    flash(Venue.name + 'could not be deleted')
-  else:
-    flash(Venue.name + 'has been deleted')
     
   return redirect(url_for('index'))
 
