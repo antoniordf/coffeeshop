@@ -8,12 +8,17 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+'''
+@TODO: DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+@TODO: DONE: Use the after_request decorator to set Access-Control-Allow
+'''
+
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
-  CORS(app)
-
+  CORS(app, resources={r'*/api/*': {'origins': '*'}})
+    
   #CORS headers
   @after_request
   def after_request(response):
@@ -21,15 +26,6 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
 
     return response
-
-
-  '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs TEST
-  '''
-
-  '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
-  '''
 
   '''
   @TODO: 
