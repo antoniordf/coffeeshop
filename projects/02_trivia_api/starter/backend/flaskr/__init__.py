@@ -7,7 +7,6 @@ import random
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
-CATEGORIES_PER_PAGE = 5
 
 def paginate_questions(request, selection):
     page = request.args.get('page', 1, type=int)
@@ -18,16 +17,6 @@ def paginate_questions(request, selection):
     current_questions = questions[start:end]
 
     return current_questions
-
-def paginate_categories(request, selection):
-    page = request.args.get('page', 1, type=int)
-    start = (page - 1) * CATEGORIES_PER_PAGE
-    end = start + CATEGORIES_PER_PAGE
-
-    categories = [category.format() for category in selection]
-    current_categories = categories[start:end]
-
-    return current_categories
 
 
 '''
@@ -49,19 +38,18 @@ def create_app(test_config=None):
 
         return response
 
-    '''@TODO: Create an endpoint to handle GET requests for all available categories.'''
+    '''@TODO: DONE: Create an endpoint to handle GET requests for all available categories.'''
 
     @app.route('/categories', methods=['GET'])
     def get_categories():
         selection = Category.query.order_by(Category.id).all()
-        current_categories = paginate_categories(request, selection)
 
-        if len(current_categories) == 0:
+        if len(selection) == 0:
             abort(404)
 
         return jsonify({
             'success': True,
-            'categories': current_categories,
+            'categories': selection,
             'total_categories': len(Category.query.all())
         })
 
