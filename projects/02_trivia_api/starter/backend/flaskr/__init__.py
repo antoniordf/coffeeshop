@@ -68,7 +68,23 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     '''
 
-    @app.route('/questions', methods=['GET'])
+    def get_category_list():
+        categories = {}
+        category_list = Category.query.all()
+
+        for category in category_list:
+            categories[category.id] = category.type
+        
+        return categories
+
+    '''
+    Please see link for help with issue I was having: https://knowledge.udacity.com/questions/116054 and 
+    https://knowledge.udacity.com/questions/157335. The client was not loading the questions. I needed to
+    add "categories" and "current_category" to json response. I also needed to update the URL expected in 
+    the frontend from http://127.0.0.1:3000/questions?page=${this.state.page} to /questions?page=${this.state.page}
+    I am not sure it should have been the frontend URL (3000 port) anyway. It should probably be 5000 port.
+    '''
+    @app.route('/questions', methods=['GET']) 
     def get_questions():
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
@@ -79,7 +95,9 @@ def create_app(test_config=None):
         return jsonify({
             'success': True,
             'questions': current_questions,
-            'total_questions': len(Question.query.all())
+            'total_questions': len(selection),
+            'categories': get_category_list(),
+            'current_category': None
         })
 
     '''
