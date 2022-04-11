@@ -28,7 +28,7 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
-    CORS(app, resources={r'*/api/*': {'origins': '*'}})
+    CORS(app, resources={r'/api/*': {'origins': '*'}}) #the lecture and class notes were wrong. There should be no * in front of /api... {r"/api/*": {"origins": "*"}})
     
     #CORS headers
     @app.after_request
