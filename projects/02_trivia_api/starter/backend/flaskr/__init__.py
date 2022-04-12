@@ -97,7 +97,7 @@ def create_app(test_config=None):
             'questions': current_questions,
             'total_questions': len(selection),
             'categories': get_category_list(),
-            'current_category': None
+            'current_category': None #Need to update test for this endpoint
         })
 
     '''
