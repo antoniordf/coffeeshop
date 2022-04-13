@@ -149,25 +149,34 @@ def create_app(test_config=None):
         new_category = body.get('category', None)
         new_difficulty = body.get('difficulty', None)
 
-        question = Question(
-            question=new_question, 
-            answer=new_answer, 
-            category=new_category, 
-            difficulty=new_difficulty
-            )
+        try:
+            question = Question(
+                question=new_question, 
+                answer=new_answer, 
+                category=new_category, 
+                difficulty=new_difficulty
+                )
 
-        question.insert()
+            question.insert()
 
-        selection = Question.query.order_by(Question.id).all()
-        current_questions = paginate_questions(request, selection)
+            selection = Question.query.order_by(Question.id).all()
+            categories = Category.query.order_by(Category.id).all()
+            current_questions = paginate_questions(request, selection)
+            categories_dict = {}
 
-        return jsonify({
-            'success': True,
-            'created': question.id,
-            'questions': current_questions,
-            'category': question.category,
-            'total_questions': len(current_questions)
-        })
+            for category in categories:
+                categories_dict[category.id] = category.type
+
+            return jsonify({
+                'success': True,
+                'created': question.id,
+                'questions': current_questions,
+                'category': categories_dict,
+                'total_questions': len(current_questions)
+            })
+
+        except:
+            abort(422)
 
     '''
     @TODO: 
