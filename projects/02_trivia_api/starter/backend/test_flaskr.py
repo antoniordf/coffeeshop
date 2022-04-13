@@ -67,11 +67,12 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
         self.assertEqual(question, None)
 
+    '''
     def test_create_question(self):
         res = self.client().post('/questions', json=self.new_question)
         data = json.loads(res.data)
         pass
-
+    '''
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
