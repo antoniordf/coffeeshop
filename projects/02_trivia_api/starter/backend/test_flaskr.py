@@ -93,17 +93,16 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data["questions"]), 0)
 
     def test_filter_by_category_success(self):
-        res = self.client().post('/categories/1/questions')
+        res = self.client().get('/categories/1/questions')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
         self.assertTrue(data["total_questions"])
         self.assertTrue(len(data["questions"]))
-        self.assertEqual(data['category'], 1)
 
     def test_filter_by_category_fail(self):
-        res = self.client().post('/categories/10/questions')
+        res = self.client().get('/categories/10/questions')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
