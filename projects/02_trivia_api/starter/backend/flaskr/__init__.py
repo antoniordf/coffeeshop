@@ -216,7 +216,7 @@ def create_app(test_config=None):
         selection = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
         current_questions = paginate_questions(request, selection)
 
-        if len(current_questions) == 0:
+        if current_questions is None:
             abort(404)
 
         return jsonify({
