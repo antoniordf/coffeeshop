@@ -211,7 +211,7 @@ def create_app(test_config=None):
     category to be shown. 
     '''
 
-    @app.route('/categories/<int:category_id>', methods=['GET'])
+    @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def filter_by_category(category_id):
         selection = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
         current_questions = paginate_questions(request, selection)
