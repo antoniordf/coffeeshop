@@ -100,6 +100,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["total_questions"])
         self.assertTrue(len(data["questions"]))
+        self.assertEqual(data['total_questions'], 3) #There are 3 questions in category 1
 
     def test_filter_by_category_fail(self):
         res = self.client().get('/categories/10/questions')
