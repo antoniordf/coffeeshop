@@ -211,6 +211,20 @@ def create_app(test_config=None):
     category to be shown. 
     '''
 
+    @app.route('/categories/<int:category_id>', methods=['GET'])
+    def filter_by_category(category_id):
+        selection = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
+        current_questions = paginate_questions(request, selection)
+
+        if len(current_questions) == 0:
+            abort(404)
+
+        return jsonify({
+            'success': True,
+            'questions': current_questions,
+            'total_questions': len(selection)
+        })
+
 
     '''
     @TODO: 
