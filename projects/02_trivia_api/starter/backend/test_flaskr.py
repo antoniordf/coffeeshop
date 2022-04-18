@@ -80,8 +80,8 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertTrue(data["total_books"])
-        self.assertEqual(len(data["books"]), 1)
+        self.assertTrue(data["total_questions"])
+        self.assertEqual(len(data["questions"]), 1)
 
     def test_get_question_search_without_results(self):
         res = self.client().post('/questions', json={'search': "applejacks"})
@@ -89,8 +89,8 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertEqual(data["total_books"], 0)
-        self.assertEqual(len(data["books"]), 0)
+        self.assertEqual(data["total_questions"], 0)
+        self.assertEqual(len(data["questions"]), 0)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
