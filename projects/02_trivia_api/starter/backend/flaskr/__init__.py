@@ -85,7 +85,7 @@ def create_app(test_config=None):
     I am not sure it should have been the frontend URL (3000 port) anyway. It should probably be 5000 port.
     '''
     @app.route('/questions/', methods=['GET']) 
-    def get_questions():
+    def get_paginated_questions():
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
 
