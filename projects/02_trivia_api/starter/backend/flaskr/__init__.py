@@ -238,6 +238,36 @@ def create_app(test_config=None):
     and shown whether they were correct or not. 
     '''
 
+    @app.route('/quizzes', methods=['POST'])
+    def play_game():
+        
+        body = request.get_json()
+
+        previous_questions = body.get('previous_questions', [])
+        category = body.get('category', None)
+
+        try:
+            if category == 0 or category is None:
+                quiz_questions = Question.query.all()
+            else:
+                quiz_questions = Question.query.filter(Question.category == category).all()
+            
+            selected_questions = []
+
+            for question in quiz_questions:
+                if question.id not in previous_questions:
+                    selected_questions.append(question.format())
+
+            if len(selected_questions) != 0:
+                quest = random.choice(selected_questions)
+                return jsonify({
+                    'question': quest
+                })
+            else:
+                abort(422)
+        except:
+            abort(404)
+
     '''
     @TODO: 
     Create error handlers for all expected errors 
