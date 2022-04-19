@@ -92,7 +92,7 @@ def create_app(test_config=None):
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
 
-        if current_questions in None: 
+        if current_questions is None: 
             abort(404)
 
         return jsonify({
