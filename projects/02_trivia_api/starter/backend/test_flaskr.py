@@ -43,7 +43,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_categories'])
         self.assertTrue(len(data['categories']))
 
-    def test_get_paginated_questions(self):
+    def test_get_paginated_questions_success(self):
         res = self.client().get('/questions')
         data = json.loads(res.data)
 
@@ -53,7 +53,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
         self.assertTrue(data['categories'])
         self.assertEqual(data['current_category'], None)
+    
+    def test_get_paginated_questions_fail(self):
+        res = self.client().get('/questions')
+        data = json.loads(res.data)
 
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['total_questions'], None)
+        self.assertEqual(len(data['questions']), 0)
+        self.assertEqual(data['categories'], None)
+        self.assertEqual(data['current_category'], None)
+    
     def test_delete_question(self):
         res = self.client().delete('/questions/5')
         data = json.loads(res.data)
