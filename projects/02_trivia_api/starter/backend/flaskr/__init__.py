@@ -87,7 +87,7 @@ def create_app(test_config=None):
     the frontend from http://127.0.0.1:3000/questions?page=${this.state.page} to /questions?page=${this.state.page}
     I am not sure it should have been the frontend URL (3000 port) anyway. It should probably be 5000 port.
     '''
-    @app.route('/questions/', methods=['GET']) 
+    @app.route('/questions/', methods=['GET']) #For some reason if I remove the / after questions, the app breaks.
     def get_paginated_questions():
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
