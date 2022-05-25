@@ -7,9 +7,9 @@ from urllib.request import urlopen
 
 app = Flask(__name__)
 
-AUTH0_DOMAIN = @TODO_REPLACE_WITH_YOUR_DOMAIN
+AUTH0_DOMAIN = 'dev-r2rrc0k2.eu.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = @TODO_REPLACE_WITH_YOUR_API_AUDIENCE
+API_AUDIENCE = 'My App'
 
 
 class AuthError(Exception):
@@ -117,8 +117,17 @@ def requires_auth(f):
 
     return wrapper
 
+'''
+@app.route('/image')
+@requires_auth('get:image')
+def images(jwt):
+    #@TODO unpack the request headers
+    print(jwt)
+    return 'not implemented'
+'''
+
 @app.route('/headers')
-@requires_auth
+@requires_auth('get:headers')
 def headers(payload):
     print(payload)
-    return 'Access Granted'
+    return 'Access Granted' 

@@ -247,13 +247,13 @@ def create_app(test_config=None):
         body = request.get_json()
 
         previous_questions = body.get('previous_questions', [])
-        category = body.get('category', None)
+        category = body.get('quiz_category', None)  # I was using 'category' as the key but should use the key name that the front end sends to the back end. You can find that in line 55 of QuizView.js (quiz_category)
 
         try:
-            if category == 0 or category is None:
+            if category['id'] == 0 or category['id'] is None:
                 quiz_questions = Question.query.all()
             else:
-                quiz_questions = Question.query.filter(Question.category == category).all()
+                quiz_questions = Question.query.filter(Question.category == category['id']).all()
             
             selected_questions = []
 
@@ -263,11 +263,15 @@ def create_app(test_config=None):
 
             if len(selected_questions) != 0:
                 quest = random.choice(selected_questions)
+                index = selected_questions.index(quest)
+                popped_question = selected_questions.pop(index)
+                previous_questions.append(popped_question)
+                
                 return jsonify({
                     'question': quest
                 })
             else:
-                abort(422)
+                return 0  #https://knowledge.udacity.com/questions/684367
         except:
             abort(404)
 

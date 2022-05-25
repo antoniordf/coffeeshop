@@ -44,7 +44,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['categories']))
 
     def test_get_paginated_questions_success(self):
-        res = self.client().get('/questions')
+        res = self.client().get('/questions/')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -55,15 +55,12 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['current_category'], None)
     
     def test_get_paginated_questions_fail(self):
-        res = self.client().get('/questions')
+        res = self.client().get('/questions/?page=1000')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['total_questions'], None)
-        self.assertEqual(len(data['questions']), 0)
-        self.assertEqual(data['categories'], None)
-        self.assertEqual(data['current_category'], None)
+        self.assertEqual(data['message'], 'resource not found')
     
     def test_delete_question(self):
         res = self.client().delete('/questions/5')
@@ -78,13 +75,33 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
         self.assertEqual(question, None)
 
-    '''
-    def test_create_question(self):
-        res = self.client().post('/questions', json=self.new_question)
+    def test_delete_question_fail(self):
+        res = self.client().delete('/questions/1000')
         data = json.loads(res.data)
-        pass
-    '''
 
+        question = Question.query.filter(Question.id == 1000).one_or_none()
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+    
+    def test_create_question(self):
+        res = self.client().post('/questions/', json=self.question)
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['created'])
+        self.assertTrue(len(data['questions']))
+
+    def test_create_question_fail(self):
+        res = self.client().post('/questions/50', json=self.question)
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 405)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'method not allowed')
+    
     def test_get_question_search_with_results(self):
         res = self.client().post('/questions', json={'search': 'Tom Hanks'})
         data = json.loads(res.data)
@@ -121,6 +138,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertEqual(data["total_questions"], 0)
         self.assertEqual(len(data["questions"]), 0)
+
+    def test_play_quiz_success(self):
+        res = self.client().get('/quizzes')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+
+    def test_play_quiz_fail(self):
+        res = self.client().get('/quizzes')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], False)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
