@@ -89,8 +89,6 @@ def create_drink():
 
         new_drink.insert()
 
-        drinks = Drink.query.order_by(Drink.id).all()
-
         return jsonify({
             'success': True,
             'drinks': new_drink.long()
