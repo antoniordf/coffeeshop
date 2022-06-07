@@ -82,15 +82,15 @@ def create_drink():
     new_recipe = body.get('recipe', None)
 
     try:
-        drink = Drink(
+        new_drink = Drink(
             title=new_title,
             recipe=new_recipe
         )
 
-        drink.insert()
+        new_drink.insert()
 
         drinks = Drink.query.order_by(Drink.id).all()
-        formatted_drinks = [item.long() for item in drinks]
+        formatted_drinks = [drink.long() for drink in drinks]
 
         return jsonify({
             'success': True,
