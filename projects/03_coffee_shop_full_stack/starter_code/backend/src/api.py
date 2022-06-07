@@ -92,7 +92,7 @@ def create_drink():
         return jsonify({
             'success': True,
             'drinks': new_drink.long()
-        })
+        }), 200
     except Exception as e:
         print(e)
         abort(422)
