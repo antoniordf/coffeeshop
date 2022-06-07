@@ -90,11 +90,10 @@ def create_drink():
         new_drink.insert()
 
         drinks = Drink.query.order_by(Drink.id).all()
-        formatted_drinks = [drink.long() for drink in drinks]
 
         return jsonify({
             'success': True,
-            'drinks': formatted_drinks
+            'drinks': new_drink.long()
         })
     except:
         abort(422)
