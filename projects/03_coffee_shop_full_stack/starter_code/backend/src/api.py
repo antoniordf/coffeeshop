@@ -37,7 +37,7 @@ def get_drinks():
         raise AuthError({
             'code': 'No drinks found in database.',
             'description': 'Please add new drinks to the database and try again.'
-        }, 400)
+        }, 404)
 
     return jsonify({
         'success': True,
