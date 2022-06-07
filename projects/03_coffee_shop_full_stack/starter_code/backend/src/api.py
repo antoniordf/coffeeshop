@@ -29,11 +29,11 @@ db_drop_and_create_all()
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['GET'])
-@app.requires_auth('get:drinks')
 def get_drinks():
-    drinks = Drink.short().query.order_by(Drink.id).all()
+    drinks = Drink.query.order_by(Drink.id).all()
+    formatted_drinks = [drinks.short() for drink in drinks]
 
-    if drinks is None:
+    if formatted_drinks is None:
         raise AuthError({
             'code': 'No drinks found in database.',
             'description': 'Please add new drinks to the database and try again.'
@@ -41,7 +41,7 @@ def get_drinks():
 
     return jsonify({
         'success': True,
-        'drinks': drinks
+        'drinks': formatted_drinks
     }, 200)
 
 '''
