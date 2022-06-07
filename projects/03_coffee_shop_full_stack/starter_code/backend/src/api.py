@@ -34,14 +34,14 @@ def get_drinks():
 
     if drinks is None:
         raise AuthError({
-            'code': 400,
-            'description': 'No drinks found.'
-        })
+            'code': 'No drinks found in database.',
+            'description': 'Please add new drinks to the database and try again.'
+        }, 400)
 
     return jsonify({
         'success': True,
         'drinks': drinks
-    })
+    }, 200)
 
 '''
 @TODO implement endpoint
