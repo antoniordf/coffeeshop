@@ -31,7 +31,7 @@ db_drop_and_create_all()
 @app.route('/drinks', methods=['GET'])
 def get_drinks():
     drinks = Drink.query.order_by(Drink.id).all()
-    formatted_drinks = [drinks.short() for drink in drinks]
+    formatted_drinks = [drink.short() for drink in drinks]
 
     if formatted_drinks is None:
         raise AuthError({
