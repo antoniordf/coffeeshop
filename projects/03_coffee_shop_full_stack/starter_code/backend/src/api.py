@@ -62,8 +62,8 @@ def get_drinks_detail(payload):
         })
     except:
         raise AuthError({
-            'code': 'No drinks found in database.',
-            'description': 'Please add new drinks to the database and try again.'
+            'code': 'no_drinks_found',
+            'description': 'No drinks found in database'
         }, 404)
 
 
