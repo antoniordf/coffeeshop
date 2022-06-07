@@ -93,7 +93,8 @@ def create_drink():
             'success': True,
             'drinks': new_drink.long()
         })
-    except:
+    except Exception as e:
+        print(e)
         abort(422)
 
 
