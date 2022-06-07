@@ -33,7 +33,7 @@ def get_drinks():
     drinks = Drink.query.order_by(Drink.id).all()
     formatted_drinks = [drink.short() for drink in drinks]
 
-    if formatted_drinks is None:
+    if len(formatted_drinks) == 0:
         raise AuthError({
             'code': 'No drinks found in database.',
             'description': 'Please add new drinks to the database and try again.'
@@ -42,7 +42,7 @@ def get_drinks():
     return jsonify({
         'success': True,
         'drinks': formatted_drinks
-    }, 200)
+    })
 
 '''
 @TODO implement endpoint
