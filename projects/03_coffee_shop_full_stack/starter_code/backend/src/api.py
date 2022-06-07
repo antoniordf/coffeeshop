@@ -28,7 +28,20 @@ db_drop_and_create_all()
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks', methods=['GET'])
+def get_drinks():
+    drinks = Drink.short().query.order_by(Drink.id).all()
 
+    if drinks is None:
+        raise AuthError({
+            'code': 400,
+            'description': 'No drinks found.'
+        })
+
+    return jsonify({
+        'success': True,
+        'drinks': drinks
+    })
 
 '''
 @TODO implement endpoint
