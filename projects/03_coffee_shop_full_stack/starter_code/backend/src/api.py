@@ -61,7 +61,10 @@ def get_drinks_detail(payload):
             'drinks': formatted_drinks
         })
     except:
-        abort(404)
+        raise AuthError({
+            'code': 'No drinks found in database.',
+            'description': 'Please add new drinks to the database and try again.'
+        }, 404)
 
 
 '''
