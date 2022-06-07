@@ -29,6 +29,7 @@ db_drop_and_create_all()
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['GET'])
+@app.requires_auth('get:drinks')
 def get_drinks():
     drinks = Drink.short().query.order_by(Drink.id).all()
 
