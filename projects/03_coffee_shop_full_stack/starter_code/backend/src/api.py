@@ -196,6 +196,13 @@ def unprocessable(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 '''
+@app.errorhandler(AuthError)
+def invalid_claims(error):
+    return jsonify({
+        'success': False,
+        'error': 401,
+        'message': 'Unauthorized',
+    }), 401
 
 if __name__ == "__main__":
     app.debug = True
