@@ -109,7 +109,27 @@ def create_drink():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks/<int:drink_id>', methods=['PATCH'])
+@requires_auth('patch:drinks')
+def update_drink(drink_id):
+    body = request.get_json()
 
+    new_title = body.get('title', None)
+    new_recipe = body.get('recipe', None)
+
+    try:
+        updated_drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
+        updated_drink.title = new_title
+        updated_drink.recipe = new_recipe
+
+        updated_drink.update()
+
+        return jsonify({
+            'success': True,
+            'drinks': updated_drink.long()
+        }), 200
+    except:
+        abort(401)
 
 '''
 @TODO implement endpoint
