@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# For environment variables see https://www.twilio.com/blog/environment-variables-python
 database_name = os.environ['DB_NAME']
 database_path = os.environ['DB_URL']
 
