@@ -24,7 +24,6 @@ def paginate_questions(request, selection):
 @TODO: DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
 @TODO: DONE: Use the after_request decorator to set Access-Control-Allow
 '''
-# test
 
 
 def create_app(test_config=None):
