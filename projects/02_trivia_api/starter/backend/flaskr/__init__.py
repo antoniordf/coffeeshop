@@ -8,6 +8,7 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+
 def paginate_questions(request, selection):
     page = request.args.get('page', 1, type=int)
     start = (page - 1) * QUESTIONS_PER_PAGE
@@ -23,18 +24,23 @@ def paginate_questions(request, selection):
 @TODO: DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
 @TODO: DONE: Use the after_request decorator to set Access-Control-Allow
 '''
-#test
+# test
+
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
-    CORS(app, resources={r'/api/*': {'origins': '*'}}) #the lecture and class notes were wrong. There should be no * in front of /api... {r"/api/*": {"origins": "*"}})
-    
-    #CORS headers
+    # the lecture and class notes were wrong. There should be no * in front of /api... {r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r'/api/*': {'origins': '*'}})
+
+    # CORS headers
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PUT,POST,DELETE,OPTIONS')
 
         return response
 
@@ -43,7 +49,7 @@ def create_app(test_config=None):
     @app.route('/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.order_by(Category.id).all()
-        
+
         current_categories = {}
         for category in categories:
             current_categories[category.id] = category.type
@@ -56,7 +62,6 @@ def create_app(test_config=None):
             'categories': current_categories,
             'total_categories': len(Category.query.all())
         })
-
 
     '''
     @TODO: 
@@ -77,7 +82,7 @@ def create_app(test_config=None):
 
         for category in category_list:
             categories[category.id] = category.type
-        
+
         return categories
 
     '''
@@ -87,12 +92,13 @@ def create_app(test_config=None):
     the frontend from http://127.0.0.1:3000/questions?page=${this.state.page} to /questions?page=${this.state.page}
     I am not sure it should have been the frontend URL (3000 port) anyway. It should probably be 5000 port.
     '''
-    @app.route('/questions/', methods=['GET']) #For some reason if I remove the / after questions, the app breaks. But curl requests omitting the second / work. 
+    @app.route('/questions/', methods=['GET'])  # For some reason if I remove the / after questions, the app breaks. But curl requests omitting the second / work.
     def get_paginated_questions():
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
 
-        if current_questions is None: #I used to have 'if len(current_questions == 0:' this was producing 'JSONDecodeError: Expecting value: line 1 column 1 (char 0)'. Using 'is None' fixes that for cases where HTTP returns 404. 
+        # I used to have 'if len(current_questions == 0:' this was producing 'JSONDecodeError: Expecting value: line 1 column 1 (char 0)'. Using 'is None' fixes that for cases where HTTP returns 404.
+        if current_questions is None:
             abort(404)
 
         return jsonify({
@@ -114,7 +120,8 @@ def create_app(test_config=None):
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
-            question = Question.query.filter(Question.id == question_id).one_or_none()
+            question = Question.query.filter(
+                Question.id == question_id).one_or_none()
 
             if question is None:
                 abort(404)
@@ -167,7 +174,7 @@ def create_app(test_config=None):
             if search:
                 selection = Question.query.order_by(Question.id).filter(
                     Question.question.ilike('%{}%'.format(search))
-                    )
+                )
                 current_questions = paginate_questions(request, selection)
 
                 return jsonify({
@@ -178,11 +185,11 @@ def create_app(test_config=None):
 
             else:
                 question = Question(
-                    question=new_question, 
-                    answer=new_answer, 
-                    category=new_category, 
+                    question=new_question,
+                    answer=new_answer,
+                    category=new_category,
                     difficulty=new_difficulty
-                    )
+                )
 
                 question.insert()
 
@@ -216,10 +223,12 @@ def create_app(test_config=None):
 
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def filter_by_category(category_id):
-        selection = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
+        selection = Question.query.order_by(Question.id).filter(
+            Question.category == category_id).all()
         current_questions = paginate_questions(request, selection)
 
-        if current_questions is None:  #I used to have 'if len(current_questions == 0:' this was producing 'JSONDecodeError: Expecting value: line 1 column 1 (char 0)'. Using 'is None' fixes that for cases where HTTP returns 404. 
+        # I used to have 'if len(current_questions == 0:' this was producing 'JSONDecodeError: Expecting value: line 1 column 1 (char 0)'. Using 'is None' fixes that for cases where HTTP returns 404.
+        if current_questions is None:
             abort(404)
 
         return jsonify({
@@ -227,7 +236,6 @@ def create_app(test_config=None):
             'questions': current_questions,
             'total_questions': len(selection)
         })
-
 
     '''
     @TODO: 
@@ -243,18 +251,20 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def play_game():
-        
+
         body = request.get_json()
 
         previous_questions = body.get('previous_questions', [])
-        category = body.get('quiz_category', None)  # I was using 'category' as the key but should use the key name that the front end sends to the back end. You can find that in line 55 of QuizView.js (quiz_category)
+        # I was using 'category' as the key but should use the key name that the front end sends to the back end. You can find that in line 55 of QuizView.js (quiz_category)
+        category = body.get('quiz_category', None)
 
         try:
             if category['id'] == 0 or category['id'] is None:
                 quiz_questions = Question.query.all()
             else:
-                quiz_questions = Question.query.filter(Question.category == category['id']).all()
-            
+                quiz_questions = Question.query.filter(
+                    Question.category == category['id']).all()
+
             selected_questions = []
 
             for question in quiz_questions:
@@ -266,12 +276,12 @@ def create_app(test_config=None):
                 index = selected_questions.index(quest)
                 popped_question = selected_questions.pop(index)
                 previous_questions.append(popped_question)
-                
+
                 return jsonify({
                     'question': quest
                 })
             else:
-                return 0  #https://knowledge.udacity.com/questions/684367
+                return 0  # https://knowledge.udacity.com/questions/684367
         except:
             abort(404)
 
@@ -284,25 +294,25 @@ def create_app(test_config=None):
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
-            "success": False, 
-            "error": 404, 
+            "success": False,
+            "error": 404,
             "message": "resource not found"
-            }),404
+        }), 404
 
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
-            "success": False, 
-            "error": 422, 
+            "success": False,
+            "error": 422,
             "message": "unprocessable"
-            }),422
+        }), 422
 
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
-            "success": False, 
-            "error": 400, 
+            "success": False,
+            "error": 400,
             "message": "bad request"
-            }),400
+        }), 400
 
     return app
