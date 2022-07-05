@@ -248,8 +248,9 @@ def create_app(test_config=None):
     and shown whether they were correct or not. 
     '''
 
+    # Udacity mentor says this code runs fine (https://knowledge.udacity.com/questions/837367) however examiner says it doesn't display score and end game properly.
     @app.route('/quizzes', methods=['POST'])
-    def play_game():
+    def play_game():  
 
         body = request.get_json()
 
