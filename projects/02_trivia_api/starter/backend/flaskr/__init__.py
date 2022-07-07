@@ -166,7 +166,7 @@ def create_app(test_config=None):
         new_answer = body.get('answer', None)
         new_category = body.get('category', None)
         new_difficulty = body.get('difficulty', None)
-        search = body.get('search', None)
+        search = body.get('searchTerm', None)
 
         try:
 
