@@ -263,7 +263,7 @@ def create_app(test_config=None):
                 quiz_questions = Question.query.all()
             else:
                 quiz_questions = Question.query.filter(
-                    Question.category == category['id']).all()
+                    Question.category == str(category['id'])).all()  # Added str(). Not sure if it is correct. Line 284 here: https://github.com/HafseeMan/Trivia-project/blob/main/backend/flaskr/__init__.py
 
             selected_questions = []
 
