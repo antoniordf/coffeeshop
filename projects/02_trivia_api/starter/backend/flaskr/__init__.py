@@ -256,10 +256,10 @@ def create_app(test_config=None):
 
         previous_questions = body.get('previous_questions', [])
         # I was using 'category' as the key but should use the key name that the front end sends to the back end. You can find that in line 55 of QuizView.js (quiz_category)
-        category = body.get('quiz_category', None)
+        category = body.get('quiz_category')
 
         try:
-            if category['id'] == 0 or category['id'] is None:
+            if category['id'] == 0:  #See https://knowledge.udacity.com/questions/870832
                 quiz_questions = Question.query.all()
             else:
                 quiz_questions = Question.query.filter(
