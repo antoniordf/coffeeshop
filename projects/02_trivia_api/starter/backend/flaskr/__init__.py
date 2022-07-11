@@ -250,7 +250,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not. 
     '''
 
-    # Udacity mentor says this code runs fine (https://knowledge.udacity.com/questions/837367) however examiner says it doesn't display score and end game properly.
+    # https://knowledge.udacity.com/questions/69090
     @app.route('/quizzes', methods=['POST'])
     def play_quiz():
         body = request.get_json()
@@ -275,7 +275,7 @@ def create_app(test_config=None):
             question = None
         else:
             question = random.choice(subset)
-            
+
         try:
             while len(subset) > len(previous_questions):
                 if question.get(id) not in previous_questions:
