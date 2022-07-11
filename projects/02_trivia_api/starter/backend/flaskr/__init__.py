@@ -258,18 +258,18 @@ def create_app(test_config=None):
         previous_questions = body.get('previous_questions', None)
 
         # handling any category or a specific category
-        if category == 0:  # i.e. All
-            question_bank = Question.query.all()
+        if category == 0:  # category == 0 means all categories.
+            quiz_questions = Question.query.all()
         else:
-            question_bank = Question.query.filter(Question.category == category).all()
+            quiz_questions = Question.query.filter(Question.category == category).all()
 
         # edge case - no questions in selected category
-        if len(question_bank) == 0:
+        if len(quiz_questions) == 0:
             return jsonify({
                 'question': None
             })
-        # main logic with while loop
-        subset = [question.format() for question in question_bank if question.id not in previous_questions]
+        # main logic
+        subset = [question.format() for question in quiz_questions if question.id not in previous_questions]
         
         if len(subset) == 0:
             question = None
@@ -278,7 +278,7 @@ def create_app(test_config=None):
 
         try:
             while len(subset) > len(previous_questions):
-                if question.get(id) not in previous_questions:
+                if question.get(id) not in previous_questions: #here we use question.get(id) rather then question.id because in "subset" question.format() creates a list of dictionaries, and the .get() method is used to retrieve a value from a dict.
                     return jsonify({
                         'success': True,
                         'question': question
