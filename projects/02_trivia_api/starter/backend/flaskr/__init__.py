@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 
+from sqlalchemy import null
+
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
@@ -281,7 +283,9 @@ def create_app(test_config=None):
                     'question': quest
                 })
             else:
-                return 0  # https://knowledge.udacity.com/questions/684367
+                return jsonify({
+                    'question': null    #https://knowledge.udacity.com/questions/837367
+                })  
         except:
             abort(404)
 
