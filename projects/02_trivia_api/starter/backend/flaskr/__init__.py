@@ -252,40 +252,41 @@ def create_app(test_config=None):
 
     # Udacity mentor says this code runs fine (https://knowledge.udacity.com/questions/837367) however examiner says it doesn't display score and end game properly.
     @app.route('/quizzes', methods=['POST'])
-    def play_game():  
-
+    def play_quiz():
         body = request.get_json()
+        category = body.get('quiz_category', None).get('id')
+        previous_questions = body.get('previous_questions', None)
 
-        previous_questions = body.get('previous_questions', [])
-        # I was using 'category' as the key but should use the key name that the front end sends to the back end. You can find that in line 55 of QuizView.js (quiz_category)
-        category = body.get('quiz_category')
+        # handling any category or a specific category
+        if category == 0:  # i.e. All
+            question_bank = Question.query.all()
+        else:
+            question_bank = Question.query.filter(Question.category == category).all()
 
+        # edge case - no questions in selected category
+        if len(question_bank) == 0:
+            return jsonify({
+                'question': None
+            })
+        # main logic with while loop
+        subset = [question.format() for question in question_bank if question.id not in previous_questions]
+        
+        if len(subset) == 0:
+            question = None
+        else:
+            question = random.choice(subset)
+            
         try:
-            if category['id'] == 0:  #See https://knowledge.udacity.com/questions/870832
-                quiz_questions = Question.query.all()
-            else:
-                quiz_questions = Question.query.filter(
-                    Question.category == str(category['id'])).all()  # Added str(). Not sure if it is correct. Line 284 here: https://github.com/HafseeMan/Trivia-project/blob/main/backend/flaskr/__init__.py
-
-            selected_questions = []
-
-            for question in quiz_questions:
-                if question.id not in previous_questions:
-                    selected_questions.append(question.format())
-
-            if len(selected_questions) != 0:
-                quest = random.choice(selected_questions)
-                index = selected_questions.index(quest)
-                popped_question = selected_questions.pop(index)
-                previous_questions.append(popped_question)
-
-                return jsonify({
-                    'question': quest
-                })
-            else:
-                return jsonify({
-                    'question': null    #https://knowledge.udacity.com/questions/837367
-                })  
+            while len(subset) > len(previous_questions):
+                if question.get(id) not in previous_questions:
+                    return jsonify({
+                        'success': True,
+                        'question': question
+                    }), 200
+            return jsonify({
+                'success': True,
+                'question': question
+            }), 200
         except:
             abort(404)
 
