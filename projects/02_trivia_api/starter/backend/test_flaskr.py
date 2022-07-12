@@ -58,7 +58,7 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().get('/questions/?page=1000')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(len(data['questions']), 0)
         self.assertTrue(data['total_questions'])
     
