@@ -99,7 +99,7 @@ def create_app(test_config=None):
         current_questions = paginate_questions(request, selection)
 
         # I used to have 'if len(current_questions == 0:' this was producing 'JSONDecodeError: Expecting value: line 1 column 1 (char 0)'. Using 'is None' fixes that for cases where HTTP returns 404.
-        if current_questions is None:
+        if len(current_questions) == 0:
             abort(404)
 
         return jsonify({
