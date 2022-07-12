@@ -19,7 +19,7 @@ class TriviaTestCase(unittest.TestCase):
         #I am adding the below dict to solve an error I was getting when running the create_question tests (AttributeError: 'TriviaTestCase' object has no attribute 'question'): https://knowledge.udacity.com/questions/247875
         self.question = {
             'question': 'What is the color of the sky?',
-            'answer': 'blue',
+            'answer': 'black, but the atmosphere reflects the blue colour of the ocean',
             'category': 1,
             'difficulty': 1
         }
