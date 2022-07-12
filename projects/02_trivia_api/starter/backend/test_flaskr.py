@@ -18,7 +18,7 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name) #Fixed depracation error. See: https://knowledge.udacity.com/questions/562092
         setup_db(self.app, self.database_path)
 
-        # binds the app to the current context
+        # binds the app to the current context (whatever that means).
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
@@ -58,9 +58,9 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().get('/questions/?page=1000')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'resource not found')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(data['questions'], 0))
+        self.assertTrue(data['total_questions'])
     
     def test_delete_question(self):
         res = self.client().delete('/questions/5')
