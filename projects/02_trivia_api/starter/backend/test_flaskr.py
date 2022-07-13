@@ -33,7 +33,7 @@ class TriviaTestCase(unittest.TestCase):
             self.db.create_all()
     
     def tearDown(self):
-        """Executed after reach test"""
+        """Executed after each test"""
         pass
 
     """
@@ -136,7 +136,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["total_questions"])
         self.assertTrue(len(data["questions"]))
-        self.assertEqual(data['total_questions'], 3) #There are 3 questions in category 1
+        self.assertEqual(data['total_questions'], 5) #There are 3 questions in category 1 (considering that two tests above created new questions)
 
     def test_filter_by_category_fail(self):
         res = self.client().get('/categories/10/questions')
