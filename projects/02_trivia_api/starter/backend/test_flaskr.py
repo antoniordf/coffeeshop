@@ -92,8 +92,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
     
+    # Please see here for more details regarding test_create_question and test_create_question_fail: https://knowledge.udacity.com/questions/873234
     def test_create_question(self):
-        res = self.client().post('/questions/', json=self.question)
+        res = self.client().post('/questions', json=self.question)
         data = json.loads(res.data)
         
         self.assertEqual(res.status_code, 200)
@@ -102,7 +103,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
 
     def test_create_question_fail(self):
-        res = self.client().post('/questions/50', json=self.question)
+        res = self.client().post('/questions', json=self.question)
         data = json.loads(res.data)
         
         self.assertEqual(res.status_code, 405)
