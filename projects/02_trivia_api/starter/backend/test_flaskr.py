@@ -109,13 +109,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['created'])
         self.assertTrue(len(data['questions']))
 
+    #See https://knowledge.udacity.com/questions/873234
     def test_create_question_not_allowed(self):
-        res = self.client().post('/questions/100', json=self.question)
+        res = self.client().post('/question', json=self.question)
         data = json.loads(res.data)
         
-        self.assertEqual(res.status_code, 405)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'method not allowed')
+        self.assertEqual(data['message'], 'resource not found')
     
     def test_get_question_search_with_results(self):
         res = self.client().post('/questions', json={'searchTerm': 'Tom Hanks'})
