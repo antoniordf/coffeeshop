@@ -136,7 +136,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["total_questions"])
         self.assertTrue(len(data["questions"]))
-        self.assertEqual(data['total_questions'], 5) #There are 3 questions in category 1 (or 5 questions, considering that two tests above created new questions)
+        self.assertEqual(data['total_questions'], 4) #There are 3 questions in category 1 (or 4 questions, considering that one test above created a new questions)
 
     def test_filter_by_category_fail(self):
         res = self.client().get('/categories/10/questions')
