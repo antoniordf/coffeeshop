@@ -23,6 +23,13 @@ class TriviaTestCase(unittest.TestCase):
             'category': 1,
             'difficulty': 1
         }
+
+        # See https://knowledge.udacity.com/questions/873234
+        self.data = {
+            'previous_questions': [1, 2, 3, 4],
+            'quiz_category': {'id': 1, 'type': 'science'}
+        }
+
         setup_db(self.app, self.database_path)
 
         # binds the app to the current context (whatever that means).
@@ -147,18 +154,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["total_questions"], 0)
         self.assertEqual(len(data["questions"]), 0)
 
+    # See https://knowledge.udacity.com/questions/873234
     def test_play_quiz_success(self):
-        res = self.client().get('/quizzes')
+        res = self.client().post('/quizzes', json=self.data)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
 
+    # See https://knowledge.udacity.com/questions/873234
     def test_play_quiz_fail(self):
-        res = self.client().get('/quizzes')
+        res = self.client().post('/quizzes/10', json=self.data)
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data["success"], False)
 
 # Make the tests conveniently executable
