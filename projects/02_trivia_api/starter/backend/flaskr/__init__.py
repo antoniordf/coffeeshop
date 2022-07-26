@@ -278,7 +278,7 @@ def create_app(test_config=None):
 
         try:
             while len(subset) > len(previous_questions):
-                if question.get(id) not in previous_questions: #here we use question.get(id) rather then question.id because in "subset" question.format() creates a list of dictionaries, and the .get() method is used to retrieve a value from a dict.
+                if question.get(id) not in previous_questions: #here I use question.get(id) rather then question.id because in "subset" question.format() creates a list of dictionaries, and the .get() method is used to retrieve a value from a dict.
                     return jsonify({
                         'success': True,
                         'question': question
